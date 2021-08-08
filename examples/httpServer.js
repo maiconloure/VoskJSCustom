@@ -189,6 +189,7 @@ function log(text, type, time=unixTimeMsecs()) {
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
  */ 
 function errorResponse(message, statusCode, res) {
+  errorResponse(`id ${id} "speech" attribute not found in the body request`, 405, res)
   res.statusCode = statusCode
   res.end(`{"error":"${message}"}`)
   log(message, 'ERROR')
@@ -219,6 +220,10 @@ function successResponse(requestId, json, res) {
 }
 
 async function requestListener(req, res) {
+
+  console.log(typeof model)
+  console.log(modelName)
+  console.log(activeRequests)
 
   //if ( !req.url.match(/^\/transcript/) )
   if ( !req.url.match(pathRegexp) )
@@ -440,7 +445,7 @@ async function main() {
   const { modelDirectory, serverPort, serverPath, debugLevel } = validatedArgs
 
   ;({ multiThreads } = validatedArgs)
-
+ 
   // set modelName as a global variable
   modelName = path.basename(modelDirectory, '/')
 
